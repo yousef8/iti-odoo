@@ -6,6 +6,7 @@ from odoo import api, fields, models
 class Patient(models.Model):
     _name = "hms.patient"
     _description = "HMS Patient"
+    _rec_name = "first_name"
 
     first_name = fields.Char(string="First Name", required=True)
     last_name = fields.Char(string="Last Name", required=True)
@@ -26,7 +27,7 @@ class Patient(models.Model):
         string="Blood Type",
     )
     pcr = fields.Boolean(string="PCR")
-    image = fields.Binary(string="Image")
+    image = fields.Image(string="Image")
     address = fields.Text(string="Address")
     age = fields.Integer(string="Age", compute="_compute_age")
 
@@ -45,10 +46,3 @@ class Patient(models.Model):
                 )
             else:
                 record.age = 0
-
-    def name_get(self):
-        result = []
-        for record in self:
-            name = f"{record.first_name} {record.last_name}"
-            result.append((record.id, name))
-        return result
