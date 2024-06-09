@@ -35,9 +35,22 @@ class Patient(models.Model):
         "hms.department", string="Department", domain=[("is_opened", "=", True)]
     )
     department_capacity = fields.Integer(
-        string="Department Capacity", related="department_id.capacity", store=True
+        string="Department Capacity", related="department_id.capacity", store=False
     )
     doctor_ids = fields.Many2many("hms.doctor", string="Doctors")
+    state = fields.Selection(
+        [
+            ("undetermined", "Undetermined"),
+            ("good", "Good"),
+            ("fair", "Fair"),
+            ("serious", "Serious"),
+        ],
+        string="State",
+        default="undetermined",
+    )
+    log_history_ids = fields.One2many(
+        "hms.patient.log.history", "patient_id", string="Log History"
+    )
 
     @api.depends("birth_date")
     def _compute_age(self):
@@ -74,3 +87,27 @@ class Patient(models.Model):
                 raise ValidationError(
                     "Creatinine Level is required if PCR Test is checked."
                 )
+
+    @api.model
+    def create(self, vals):
+        res = super(Patient, self).create(vals)
+        if "state" in vals:
+            self.env["hms.patient.log.history"].create(
+                {
+                    "patient_id": res.id,
+                    "description": f"State changed to {vals['state']}",
+                }
+            )
+        return res
+
+    def write(self, vals):
+        res = super(Patient, self).write(vals)
+        if "state" in vals:
+            for record in self:
+                self.env["hms.patient.log.history"].create(
+                    {
+                        "patient_id": record.id,
+                        "description": f"State changed to {vals['state']}",
+                    }
+                )
+        return res

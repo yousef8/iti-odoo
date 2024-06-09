@@ -1,1 +1,1 @@
-from . import department, doctor, patient
+from . import department, doctor, log_history, patient

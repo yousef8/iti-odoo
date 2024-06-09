@@ -9,6 +9,7 @@
                         <field name="first_name"/>
                         <field name="last_name"/>
                         <field name="birth_date"/>
+                        <field name="state"/>
                         <field name="age" readonly="1"/>
                         <field name="history" invisible="age > 50"/>
                         <field name="cr" required="pcr == True"/>
@@ -19,6 +20,14 @@
                         <field name="department_id"/>
                         <field name="department_capacity" readonly="1"/>
                         <field name="doctor_ids" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <field name="log_history_ids">
+                            <tree>
+                                <field name="date"/>
+                                <field name="description"/>
+                            </tree>
+                        </field>
                     </group>
                 </sheet>
             </form>
