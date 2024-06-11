@@ -10,7 +10,7 @@
     "category": "Uncategorized",
     "author": "Yousef Elsayed",
     "website": "https://www.google.com",
-    "depends": ["base"],
+    "depends": ["base", "crm"],
     "data": [
         "views/patient_actions.xml",
         "views/patient_views.xml",
@@ -18,5 +18,6 @@
         "views/department_views.xml",
         "views/doctor_actions.xml",
         "views/doctor_views.xml",
+        "views/partner_extend_views.xml",
     ],
 }
