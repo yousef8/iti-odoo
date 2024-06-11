@@ -7,6 +7,8 @@ class ResPartner(models.Model):
 
     related_patient_id = fields.Many2one("hms.patient", string="Related Patient")
 
+    vat = fields.Char(string="Tax ID", required=True)
+
     @api.constrains("related_patient_id")
     def _check_related_patient_email(self):
         for record in self:
